@@ -2,41 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hi!</title>
+    <title>Download Gift Cards JSON</title>
 </head>
 <body>
 
-    <!-- Your visible text goes right here -->
-    <h1>Welcome to My Website</h1>
-    <p>Start copying from line below!
+    <h2>Download Gift Cards Data</h2>
+    <button onclick="downloadGiftCards()">Download gift_cards.json</button>
 
- {
-    "9658-5411": {
-        "encoded_name": "77-97-114-105-101-32-77-97-99-80-104-97-105-108-32",
-        "balance": 10.0
-    },
-    "0374-1023": {
-        "encoded_name": "87-105-108-108-32-77-97-99-80-104-97-105-108",
-        "balance": 10.0
-    },
-    "6876-3919": {
-        "encoded_name": "87-105-108-108-105-97-109-32-77-97-99-80-104-97-105-108",
-        "balance": 50.0
-    },
-    "6309-9909": {
-        "encoded_name": "71-114-97-110-100-109-97",
-        "balance": 220.0
-    },
-    "4321-8318": {
-        "encoded_name": "77-97-114-107",
-        "balance": 15.0
-    },
-    "7475-8143": {
-        "encoded_name": "71-114-97-110-100-112-97",
-        "balance": 10.0
-    }
-} 
-</p>
+    <script>
+        async function downloadGiftCards() {
+            const url = 'https://nutlike-borax-try.ngrok-free.dev/';
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Convert JSON object to a string
+                const jsonString = JSON.stringify(data, null, 2);
+                
+                // Create a Blob and a download link
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const downloadUrl = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = 'gift_cards.json';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                document.body.removeChild(a);
+                URL.revokeObjectURL(downloadUrl);
+            } catch (error) {
+                console.error('Error fetching or downloading the JSON:', error);
+                alert('Failed to download gift_cards.json. Check the console for details.');
+            }
+        }
+
+        // Open the download link
+        window.onload = downloadGiftCards;
+    </script>
 
 </body>
 </html>
